@@ -51,3 +51,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;
 footer a{color:#fff}
 footer a:hover{color:#F2A33A}
 footer nav{display:flex;flex-wrap:wrap;gap:20px}
+.form{display:flex;flex-direction:column;gap:6px;margin-top:28px;max-width:560px}
+.form label{margin-top:14px;font-weight:700}
+.form input,.form textarea{width:100%;padding:12px;font:inherit;color:#12304A;background:#fff;border:2px solid #12304A;border-radius:0}
+.form input:focus,.form textarea:focus{outline:3px solid #F2A33A;outline-offset:1px}
+.form .hp{display:none}
+.form button{align-self:flex-start;cursor:pointer;font-family:inherit}
