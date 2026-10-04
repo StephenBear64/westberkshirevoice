@@ -24,6 +24,7 @@ content:
     fields:
       - name: title
         label: Headline
+        description: "Preview - about a minute after you click Save, see this story as readers will at [drafts.westberkshirevoice.pages.dev/news.html](https://drafts.westberkshirevoice.pages.dev/news.html)"
         type: string
         required: true
       - name: date

@@ -25,7 +25,7 @@ const pageMeta = JSON.parse(read('pages', 'pages.json'));
 
 function page({ title, description, nav, main, showBand = true, noindex = false }) {
   const links = NAV.map(([href, label]) => `<a href="${href}"${href === nav ? ' aria-current="page"' : ''}>${label}</a>`).join('');
-  const meta = noindex ? '<meta name="robots" content="noindex">' : `<meta name="description" content="${esc(description)}">`;
+  const meta = (noindex || SHOW_DRAFTS) ? '<meta name="robots" content="noindex">' : `<meta name="description" content="${esc(description)}">`;
   return layout
     .replace('{{title}}', () => esc(title))
     .replace('{{meta}}', () => meta)
