@@ -1,6 +1,6 @@
 # Settings for the Pages CMS editor (app.pagescms.org).
 # This file controls the editing form only. The website's design lives in layout.html and static/styles.css.
-settings:
+settings: true
 media: 
   input: static/img/uploads
   output: /img/uploads
