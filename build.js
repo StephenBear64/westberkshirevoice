@@ -87,10 +87,19 @@ const stories = fs.readdirSync(storyDir).filter((f) => f.endsWith('.json')).map(
 const IS_LIVE = branch === 'main';
 const missing = [];
 const localExists = (src) => !/^\/img\//.test(src) || fs.existsSync(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
+const caption = (text, credit) => {
+  const bits = [text ? esc(text) : '', credit ? `<span class="credit">Picture: ${esc(credit)}</span>` : ''].filter(Boolean);
+  return bits.length ? `<figcaption>${bits.join(' ')}</figcaption>` : '';
+};
 for (const s of stories) {
+  // A story is a list of blocks: text and pictures. Older stories with a single "body" still work.
+  s.parts = Array.isArray(s.content) && s.content.length ? s.content : [{ type: 'text', text: s.body || '' }];
   if (s.image && !localExists(s.image)) { missing.push(`${s.slug}: main picture ${s.image}`); s.imageMissing = true; }
-  for (const m of String(s.body || '').matchAll(/<img[^>]+src="([^"]+)"/g)) {
-    if (!localExists(m[1])) missing.push(`${s.slug}: picture in the story text ${m[1]}`);
+  for (const part of s.parts) {
+    if (part.type === 'picture' && part.image && !localExists(part.image)) { missing.push(`${s.slug}: picture in the story ${part.image}`); part.missing = true; }
+    for (const m of String(part.text || '').matchAll(/<img[^>]+src="([^"]+)"/g)) {
+      if (!localExists(m[1])) missing.push(`${s.slug}: picture in the story text ${m[1]}`);
+    }
   }
 }
 if (missing.length) {
@@ -106,11 +115,18 @@ function storyItem(s) {
 }
 
 function storyPage(s) {
-  const figure = s.image ? `<figure>${s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`}${s.credit ? `<figcaption>Picture: ${esc(s.credit)}</figcaption>` : ''}</figure>\n` : '';
+  const figure = s.image ? `<figure>${s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`}${caption(s.caption, s.credit)}</figure>\n` : '';
+  const parts = s.parts.map((part) => {
+    if (part.type === 'picture') {
+      if (!part.image) return '';
+      return `<figure class="inline">${part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`}${caption(part.caption, part.credit)}</figure>`;
+    }
+    return bodyHtml(part.text);
+  }).filter(Boolean).join('\n');
   const main = `<article class="story">${s.town ? `<p class="kicker">${esc(s.town)}</p>` : ''}
 <h1>${esc(s.title)}</h1>
 ${s.summary ? `<p class="lede">${esc(s.summary)}</p>\n` : ''}<p class="meta">Published ${longDate(s.date)}${s.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
-${figure}${bodyHtml(s.body)}
+${figure}${parts}
 <p><a href="news.html">More news</a></p>
 </article>`;
   return page({ title: `${s.title} | West Berkshire Voice`, description: s.summary || s.title, nav: 'news.html', main });

@@ -55,13 +55,48 @@ content:
         label: Picture credit
         description: The provider's name only. The site adds the word "Picture:" in front.
         type: string
+      - name: caption
+        label: Picture caption
+        description: Shown under the main picture, before the credit.
+        type: string
       - name: draft
         label: Draft
         description: New stories start as drafts. A draft is never shown on the live website. An editor unticks this when the story is approved.
         type: boolean
         default: true
-      - name: body
+      - name: content
         label: Story
-        type: rich-text
-        options:
-          format: html
+        description: Build the story from blocks. Add a Text block for writing and a Picture block wherever a picture should appear. Every picture has its own description, caption and credit.
+        type: block
+        list: true
+        blockKey: type
+        blocks:
+          - name: text
+            label: Text
+            fields:
+              - name: text
+                label: Text
+                type: rich-text
+                options:
+                  format: html
+          - name: picture
+            label: Picture
+            fields:
+              - name: image
+                label: Picture
+                description: House rule - all pictures are shown in 16:9 landscape, cropped from the centre.
+                type: image
+                required: true
+              - name: imageAlt
+                label: Picture description
+                description: What the picture shows, for people who cannot see it.
+                type: string
+                required: true
+              - name: caption
+                label: Caption
+                description: Shown under the picture.
+                type: string
+              - name: credit
+                label: Picture credit
+                description: The provider's name only. The site adds the word "Picture:" in front.
+                type: string
