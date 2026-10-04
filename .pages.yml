@@ -32,14 +32,14 @@ content:
           message: Publishing sends the last SAVED version of this story to the public website, not what is on your screen. If you have changed anything since you last clicked Save, press Cancel, click Save, then press Publish again. No other story is affected. Only editors can publish.
           button: Yes, publish the saved version
       - name: unpublish-story
-        label: Take off live site
+        label: Unpublish
         scope: entry
         workflow: publish.yml
         cancelable: false
         confirm:
-          title: Take this story off the live site?
+          title: Unpublish this story?
           message: This story will disappear from the public website in a minute or two. It stays here in the editor as a draft. Only editors can do this.
-          button: Take it off
+          button: Unpublish
     fields:
       - name: title
         label: Headline
@@ -85,7 +85,7 @@ content:
         type: string
       - name: draft
         label: Draft
-        description: Shows whether this story is on the live website. You do not need to change it. An editor's Publish this story button unticks it, and Take off live site ticks it again.
+        description: Shows whether this story is on the live website. You do not need to change it. An editor's Publish button unticks it, and Unpublish ticks it again.
         type: boolean
         default: true
       - name: content

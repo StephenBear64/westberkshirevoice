@@ -1,4 +1,4 @@
-# Runs when an editor presses "Publish this story" or "Take off live site" inside a story in the Pages CMS editor.
+# Runs when an editor presses "Publish" or "Unpublish" inside a story in the Pages CMS editor.
 # The work is done by tools/publish.js. It moves that one story only.
 name: Publish a story
 on:

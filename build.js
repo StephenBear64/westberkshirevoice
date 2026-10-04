@@ -228,7 +228,7 @@ write('404.html', page({
   main: '<div class="prose"><p class="kicker">Page not found</p>\n<h1>This page is not available</h1>\n<p>The page you are looking for may have been removed, or the address may be wrong.</p>\n<p><a href="/news.html">See the latest news</a> or go to the <a href="/">home page</a>.</p></div>',
 }).replace(/(href|src)="(?!https?:|\/|#|mailto:)/g, '$1="/'));
 
-// Stories taken off the live site. Cloudflare keeps serving a removed page from its own cache for up to a week,
+// Unpublished stories. Cloudflare keeps serving a removed page from its own cache for up to a week,
 // so each removed story's address is given a "not here" page to replace it straight away.
 {
   let removed = [];
@@ -241,7 +241,7 @@ write('404.html', page({
   }
 }
 
-// Shown for any address that does not exist, including stories that have been taken off the live site.
+// Shown for any address that does not exist, including unpublished stories.
 {
   const m = pageMeta['404'];
   write('404.html', page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: true, main: read('pages', '404.html').trim() }).replace('<head>', '<head>\n<base href="/">'));

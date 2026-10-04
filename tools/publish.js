@@ -1,4 +1,4 @@
-// Run by the "Publish this story" and "Take off live site" buttons in the editor (see .github/workflows/publish.yml).
+// Run by the "Publish" and "Unpublish" buttons in the editor (see .github/workflows/publish.yml).
 // It moves ONE story between the drafts copy (branch "drafts") and the live site (branch "main").
 // Nothing else on the live site is touched.
 const { execFileSync } = require('child_process');
@@ -36,7 +36,7 @@ const flagged = (draft) => JSON.stringify({ ...data, draft }, null, 2) + '\n';
 const changed = () => git('status', '--porcelain', '--untracked-files=all', '--', 'stories', 'static') !== '';
 
 // 3. The live site (branch "main", already checked out).
-// removed.json lists stories taken off the live site, so their addresses show a "not here" page at once
+// removed.json lists unpublished stories, so their addresses show a "not here" page at once
 // instead of a copy that Cloudflare would otherwise keep serving for up to a week.
 const slug = path.basename(story, '.json');
 let removed = [];
@@ -50,7 +50,7 @@ const setRemoved = (on) => {
 if (unpublish) {
   if (fs.existsSync(story)) git('rm', '-q', '--', story);
   setRemoved(true);
-  if (git('diff', '--cached', '--name-only') !== '') git('commit', '-q', '-m', `Take off live site: ${title}`);
+  if (git('diff', '--cached', '--name-only') !== '') git('commit', '-q', '-m', `Unpublish: ${title}`);
 } else {
   setRemoved(false);
   fs.writeFileSync(story, flagged(false));
@@ -81,4 +81,4 @@ if (Boolean(data.draft) !== unpublish) {
 
 // 5. Make it public.
 git('push', '-q', 'origin', `${liveCommit}:main`);
-say(unpublish ? `Taken off the live site: "${title}". It will disappear in a minute or two and stays in the editor as a draft.` : `Published: "${title}". It will be on the live site in a minute or two.`);
+say(unpublish ? `Unpublished: "${title}". It will disappear in a minute or two and stays in the editor as a draft.` : `Published: "${title}". It will be on the live site in a minute or two.`);
