@@ -160,6 +160,7 @@ if (IS_LIVE) {
     const wrong = [];
     if (s.image && !s.imageMissing && (notOurs(s.image) || wrongShape(s.image))) wrong.push(s.image);
     for (const part of s.parts) if (part.type === 'picture' && part.image && !part.missing && (notOurs(part.image) || wrongShape(part.image))) wrong.push(part.image);
+    for (const part of s.parts) for (const m of String(part.text || '').matchAll(/<img[^>]+src="([^"]+)"/g)) if (notOurs(m[1])) wrong.push(m[1]);
     if (wrong.length) { console.log(`Held back, not published (picture not 16:9 or not hosted on our site): ${s.slug}\n  ${wrong.join('\n  ')}`); stories.splice(i, 1); }
   }
 }
@@ -182,7 +183,7 @@ function storyPage(s) {
       if (!part.image) return '';
       return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
     }
-    return bodyHtml(part.text);
+    return (SHOW_DRAFTS && /<img[^>]+src="(https?:)?\/\//i.test(String(part.text || '')) ? LINK_WARNING : '') + bodyHtml(part.text);
   }).filter(Boolean).join('\n');
   const main = `<article class="story">${s.town ? `<p class="kicker">${esc(s.town)}</p>` : ''}
 <h1>${esc(s.title)}</h1>
