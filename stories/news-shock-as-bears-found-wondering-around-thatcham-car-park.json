@@ -3,10 +3,10 @@
   "date": "2026-10-04T16:51",
   "town": "Thatcham",
   "summary": "Shoppers were in a state of shock when two brown bears wandered through the car park next to Waitrose in Thatcham. Luckily the bears were just looking for food and not interested in attacking anyone. By the time the police arrived, some hours later, the bear had gone. ",
+  "byline": "Terry Fuckwitt",
   "image": "/img/uploads/bear in car park.jpg",
   "imageAlt": "Two bears on the road next to Waitrose",
   "credit": "Tracy Smith",
-  "caption": "",
   "draft": true,
   "content": [
     {
@@ -16,9 +16,9 @@
     {
       "type": "picture",
       "image": "/img/uploads/bear-spraying-la_0001.png",
-      "imageAlt": "",
-      "caption": "",
-      "credit": ""
+      "imageAlt": "A bear being sprayed",
+      "caption": "People have to defend themselves from aggressive bears",
+      "credit": "Bear Media"
     },
     {
       "type": "text",
