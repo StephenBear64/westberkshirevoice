@@ -87,4 +87,7 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .nav .social{margin-left:auto;display:inline-flex;align-items:center;gap:8px}
 .nav .social{padding:6px 12px;border-bottom:0}
 .nav .social:hover{border-bottom:0}
-.nav .social img{display:block;width:36px;height:36px}
+.nav .social img{display:block;width:auto;height:36px}
+.nav .social+.social{margin-left:0}
+.nav .socials{margin-left:auto;display:inline-flex;align-items:center;flex-wrap:nowrap}
+.nav .socials .social{margin-left:0}
