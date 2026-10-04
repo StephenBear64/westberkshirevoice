@@ -150,7 +150,7 @@ function wrongShape(src) {
   const size = pictureSize(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
   return !!size && size.h > 0 && Math.abs(size.w / size.h - 16 / 9) > 0.04;
 }
-const SHAPE_WARNING = '<p class="shape-warning"><strong>This picture is not 16:9.</strong> Part of it is being cut off, so it is likely not to look good online. <a href="crop.html">Crop it with the crop tool</a>, then upload the cropped picture in its place. This story will not appear on the live site until that is done. This message is only shown on the drafts copy.</p>\n';
+const SHAPE_WARNING = '<p class="shape-warning"><strong>IMPORTANT</strong> - All pictures must be 16:9 landscape format. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. <a href="https://www.westberkshirevoice.uk/crop">westberkshirevoice.uk/crop</a></p>\n';
 const notOurs = (src) => /^(https?:)?\/\//i.test(String(src || ''));
 // On the live site a story with a picture that is not 16:9, or is linked from another website, is held back, as if it were still a draft.
 // Everything else publishes as normal, so one wrongly shaped picture never holds up other stories.
