@@ -40,5 +40,12 @@
     "nav": "",
     "band": false,
     "noindex": true
+  },
+  "404": {
+    "title": "Page not found | West Berkshire Voice",
+    "description": "",
+    "nav": "",
+    "band": false,
+    "noindex": true
   }
 }
