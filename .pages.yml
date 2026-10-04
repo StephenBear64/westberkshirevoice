@@ -5,6 +5,11 @@ media:
   output: /img/uploads
   # Give every uploaded file a unique name, so one upload can never overwrite another.
   rename: random
+  # Only picture formats that every browser can show.
+  extensions: [jpg, jpeg, png, webp]
+# Keep the Configuration page out of the editor's menu, so the form cannot be changed by accident.
+settings:
+  hide: true
 content:
   - name: news
     label: News stories
