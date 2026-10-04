@@ -65,7 +65,8 @@ if (unpublish) {
   const page = path.join('_site', path.basename(story, '.json') + '.html');
   if (!fs.existsSync(page)) stop('this story was held back. Check that it has a headline and a date, and that every picture is uploaded to our own site and is 16:9. The amber warnings on the drafts copy say what to fix.');
   git('add', '--', 'stories', 'static');
-  if (changed() || git('diff', '--cached', '--name-only') !== '') git('commit', '-q', '-m', `Publish: ${title}`);
+  if (git('diff', '--cached', '--name-only') === '') stop('nothing to publish. The saved version of this story is already on the live site. If you have made changes, click Save first, then publish again.');
+  git('commit', '-q', '-m', `Publish: ${title}`);
 }
 const liveCommit = git('rev-parse', 'HEAD');
 
