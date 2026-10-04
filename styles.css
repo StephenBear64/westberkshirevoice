@@ -79,3 +79,6 @@ footer nav{display:flex;flex-wrap:wrap;gap:20px}
 .latest>h2{margin:0;font-size:28px;font-weight:800;line-height:1.1}
 .latest .newslist{margin-top:18px}
 .latest .more{margin:20px 0 0;font-weight:700}
+.story figure{float:right;width:320px;max-width:45%;margin:6px 0 16px 28px}
+.story .source{clear:both}
+@media (max-width:560px){.story figure{float:none;width:100%;max-width:320px;margin:24px 0 8px}}
