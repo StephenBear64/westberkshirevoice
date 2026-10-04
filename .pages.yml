@@ -1,0 +1,64 @@
+# Settings for the Pages CMS editor (app.pagescms.org).
+# This file controls the editing form only. The website's design lives in layout.html and static/styles.css.
+media:
+  input: static/img/uploads
+  output: /img/uploads
+content:
+  - name: news
+    label: News stories
+    type: collection
+    path: stories
+    filename: "news-{primary}.json"
+    format: json
+    view:
+      primary: title
+      fields:
+        - title
+        - date
+        - town
+        - draft
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Headline
+        type: string
+        required: true
+      - name: date
+        label: Date and time
+        description: Every story must have a date. Stories are listed newest first.
+        type: date
+        required: true
+        options:
+          time: true
+      - name: town
+        label: Town or area
+        description: For example Newbury, Thatcham or Hungerford.
+        type: string
+        required: true
+      - name: summary
+        label: Summary
+        description: One or two sentences shown under the headline and in the news lists.
+        type: text
+        required: true
+      - name: image
+        label: Picture
+        type: image
+      - name: imageAlt
+        label: Picture description
+        description: A short description of what the picture shows, for people who cannot see it.
+        type: string
+      - name: credit
+        label: Picture credit
+        description: The provider's name only. The site adds the word "Picture:" in front.
+        type: string
+      - name: draft
+        label: Draft
+        description: Tick to keep this story off the live website until it is ready.
+        type: boolean
+        default: false
+      - name: body
+        label: Story
+        type: rich-text
+        options:
+          format: html

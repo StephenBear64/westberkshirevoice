@@ -1,0 +1,37 @@
+{
+  "about": {
+    "title": "About | West Berkshire Voice",
+    "description": "About West Berkshire Voice, independent community media for West Berkshire.",
+    "nav": "about.html",
+    "band": true,
+    "noindex": false
+  },
+  "get-involved": {
+    "title": "Get Involved | West Berkshire Voice",
+    "description": "How to contribute to West Berkshire Voice.",
+    "nav": "get-involved.html",
+    "band": false,
+    "noindex": false
+  },
+  "contact": {
+    "title": "Contact | West Berkshire Voice",
+    "description": "How to contact West Berkshire Voice.",
+    "nav": "contact.html",
+    "band": true,
+    "noindex": false
+  },
+  "thanks": {
+    "title": "Message sent | West Berkshire Voice",
+    "description": "",
+    "nav": "contact.html",
+    "band": true,
+    "noindex": true
+  },
+  "index": {
+    "title": "West Berkshire Voice",
+    "description": "Independent community media for West Berkshire. Programmes on Mixcloud and updates on Facebook.",
+    "nav": "index.html",
+    "band": true,
+    "noindex": false
+  }
+}
