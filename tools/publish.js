@@ -36,9 +36,23 @@ const flagged = (draft) => JSON.stringify({ ...data, draft }, null, 2) + '\n';
 const changed = () => git('status', '--porcelain', '--untracked-files=all', '--', 'stories', 'static') !== '';
 
 // 3. The live site (branch "main", already checked out).
+// removed.json lists stories taken off the live site, so their addresses show a "not here" page at once
+// instead of a copy that Cloudflare would otherwise keep serving for up to a week.
+const slug = path.basename(story, '.json');
+let removed = [];
+try { removed = JSON.parse(fs.readFileSync('removed.json', 'utf8')); } catch (e) { /* none yet */ }
+const setRemoved = (on) => {
+  const next = removed.filter((r) => r !== slug);
+  if (on) next.push(slug);
+  fs.writeFileSync('removed.json', JSON.stringify(next, null, 2) + '\n');
+  git('add', '--', 'removed.json');
+};
 if (unpublish) {
-  if (fs.existsSync(story)) { git('rm', '-q', '--', story); git('commit', '-q', '-m', `Take off live site: ${title}`); }
+  if (fs.existsSync(story)) git('rm', '-q', '--', story);
+  setRemoved(true);
+  if (git('diff', '--cached', '--name-only') !== '') git('commit', '-q', '-m', `Take off live site: ${title}`);
 } else {
+  setRemoved(false);
   fs.writeFileSync(story, flagged(false));
   // Bring the story's own pictures with it.
   const pictures = [...new Set((draftsText.match(/\/img\/[^"\\?#]+/g) || []).map((p) => 'static' + decodeURIComponent(p)))];
