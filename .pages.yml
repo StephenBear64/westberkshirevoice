@@ -54,9 +54,9 @@ content:
         type: string
       - name: draft
         label: Draft
-        description: Tick to keep this story off the live website until it is ready.
+        description: New stories start as drafts. A draft is never shown on the live website. An editor unticks this when the story is approved.
         type: boolean
-        default: false
+        default: true
       - name: body
         label: Story
         type: rich-text
