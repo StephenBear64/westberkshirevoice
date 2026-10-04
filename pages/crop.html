@@ -14,23 +14,28 @@
 #crop-box:focus-visible{outline:3px solid #F2A33A}
 #crop-handle{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;background:#F2A33A;border:2px solid #fff;box-sizing:border-box;cursor:nwse-resize}
 #crop-note{margin:14px 0 0;font-size:15px;color:#3E4A55}
+.prose ol{margin:14px 0 0;padding-left:22px}
 </style>
 <div class="prose">
 <p class="kicker">For contributors</p>
 <h1>Crop a picture to 16:9</h1>
-<p>Choose a picture, drag the box over the part you want, then save. The cropped picture downloads to your computer, ready to upload in the editor.</p>
+<p>All news pictures on West Berkshire Voice are shown in 16:9 landscape. Use this page to choose which part of your picture appears.</p>
+<ol>
+<li>Click the button and choose a picture from your computer.</li>
+<li>Drag the box over the part of the picture you want. Drag the amber corner to make the box bigger or smaller.</li>
+<li>Click "Save cropped picture". The cropped picture downloads to your computer.</li>
+<li>Upload the cropped picture to your story in the editor.</li>
+</ol>
 </div>
 <div class="crop-tools">
 <input type="file" id="crop-file" accept="image/*">
 <label for="crop-file" class="btn crop-btn">Choose a picture from your computer</label>
-<label for="crop-existing">or one already uploaded:</label>
-<select id="crop-existing"><option value="">Select a picture</option>{{uploads}}</select>
 </div>
 <div id="crop-stage">
 <img id="crop-img" alt="The picture being cropped">
 <div id="crop-box" tabindex="0" role="group" aria-label="Crop box. Arrow keys move it, plus and minus resize it."><span id="crop-handle" aria-hidden="true"></span></div>
 </div>
-<p id="crop-note">Drag the box to move it. Drag the amber corner to make it bigger or smaller. Nothing is sent anywhere: the picture stays on your computer.</p>
+<p id="crop-note">Your picture is not uploaded or stored by this page. It stays on your computer.</p>
 <div class="crop-tools">
 <button type="button" class="btn crop-btn" id="crop-save" disabled>Save cropped picture</button>
 <span id="crop-size"></span>
@@ -41,7 +46,7 @@
   var img = document.getElementById('crop-img'), stage = document.getElementById('crop-stage');
   var box = document.getElementById('crop-box'), handle = document.getElementById('crop-handle');
   var save = document.getElementById('crop-save'), sizeNote = document.getElementById('crop-size');
-  var file = document.getElementById('crop-file'), existing = document.getElementById('crop-existing');
+  var file = document.getElementById('crop-file');
   var c = { x: 0, y: 0, w: 0 }, name = 'picture', objectUrl = null;
 
   function scale() { return img.clientWidth / img.naturalWidth; }
@@ -74,10 +79,7 @@
   file.addEventListener('change', function () {
     var f = file.files[0]; if (!f) return;
     if (objectUrl) URL.revokeObjectURL(objectUrl);
-    objectUrl = URL.createObjectURL(f); existing.value = ''; load(objectUrl, f.name);
-  });
-  existing.addEventListener('change', function () {
-    if (existing.value) load(existing.value, existing.options[existing.selectedIndex].text);
+    objectUrl = URL.createObjectURL(f); load(objectUrl, f.name);
   });
 
   var drag = null;
