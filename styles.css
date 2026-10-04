@@ -57,3 +57,25 @@ footer nav{display:flex;flex-wrap:wrap;gap:20px}
 .form input:focus,.form textarea:focus{outline:3px solid #F2A33A;outline-offset:1px}
 .form .hp{display:none}
 .form button{align-self:flex-start;cursor:pointer;font-family:inherit}
+.meta{margin:14px 0 0;font-size:15px;font-weight:700;color:#3E4A55}
+.story{max-width:760px}
+.story h1{font-size:clamp(32px,4.4vw,50px)}
+.story p{margin:18px 0 0}
+.story figure{margin:28px 0 8px}
+.story img{display:block;width:100%;height:auto}
+.story figcaption{margin-top:8px;font-size:14px;color:#3E4A55}
+.story .source{margin-top:32px;padding-top:18px;border-top:1px solid #C9D1CD;font-size:16px;color:#3E4A55}
+.newslist{margin-top:32px;display:flex;flex-direction:column;gap:28px;max-width:900px}
+.newsitem{display:flex;flex-wrap:wrap;gap:22px;padding-top:24px;border-top:4px solid #12304A}
+.newsitem .thumb{flex:1 1 220px;max-width:300px}
+.newsitem .thumb img{display:block;width:100%;height:auto}
+.newsitem>div{flex:999 1 300px;min-width:0}
+.newsitem .meta{margin:0}
+.newsitem h2{margin:6px 0 0;font-size:28px;font-weight:800;line-height:1.15}
+.newsitem h2 a{text-decoration:none}
+.newsitem h2 a:hover{text-decoration:underline}
+.newsitem p{margin:10px 0 0}
+.latest{margin-top:44px}
+.latest>h2{margin:0;font-size:28px;font-weight:800;line-height:1.1}
+.latest .newslist{margin-top:18px}
+.latest .more{margin:20px 0 0;font-weight:700}

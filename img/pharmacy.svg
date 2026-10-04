@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Illustration of a pharmacy cross above rolling hills">
+<rect width="1200" height="675" fill="#12304A"/>
+<circle cx="600" cy="300" r="200" fill="none" stroke="#F2A33A" stroke-width="12" opacity=".35"/>
+<circle cx="600" cy="300" r="150" fill="#FFFFFF"/>
+<path d="M565 205h70v60h60v70h-60v60h-70v-60h-60v-70h60z" fill="#165A4A"/>
+<path d="M0 520C150 470 320 470 480 515 640 560 800 545 960 500 1050 478 1130 478 1200 492V675H0Z" fill="#2E8A6E"/>
+<path d="M0 590C190 540 380 560 560 595 740 630 920 610 1200 560V675H0Z" fill="#1F7059"/>
+<path d="M0 650C220 600 440 620 660 648 840 668 1020 655 1200 620V675H0Z" fill="#165A4A"/>
+</svg>
