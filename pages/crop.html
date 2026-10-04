@@ -1,0 +1,127 @@
+<style>
+.crop-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:22px 0 0}
+.crop-tools label{font-weight:700}
+.crop-tools select{min-height:46px;padding:0 10px;font:inherit;max-width:100%}
+.crop-btn{cursor:pointer;font-family:inherit;background:#12304A;color:#fff}
+.crop-btn:hover{background:#165A4A}
+.crop-btn[disabled]{opacity:.45;cursor:default}
+#crop-file{position:absolute;width:1px;height:1px;opacity:0}
+#crop-file:focus-visible+label{outline:3px solid #F2A33A;outline-offset:2px}
+#crop-stage{position:relative;display:none;max-width:100%;margin:22px 0 0;overflow:hidden;line-height:0;touch-action:none;user-select:none;background:#E3E9E6}
+#crop-stage.on{display:inline-block}
+#crop-img{display:block;max-width:100%;max-height:70vh;width:auto;height:auto}
+#crop-box{position:absolute;box-sizing:border-box;border:2px solid #fff;box-shadow:0 0 0 9999px rgba(0,0,0,.55);cursor:move}
+#crop-box:focus-visible{outline:3px solid #F2A33A}
+#crop-handle{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;background:#F2A33A;border:2px solid #fff;box-sizing:border-box;cursor:nwse-resize}
+#crop-note{margin:14px 0 0;font-size:15px;color:#3E4A55}
+</style>
+<div class="prose">
+<p class="kicker">For contributors</p>
+<h1>Crop a picture to 16:9</h1>
+<p>Choose a picture, drag the box over the part you want, then save. The cropped picture downloads to your computer, ready to upload in the editor.</p>
+</div>
+<div class="crop-tools">
+<input type="file" id="crop-file" accept="image/*">
+<label for="crop-file" class="btn crop-btn">Choose a picture from your computer</label>
+<label for="crop-existing">or one already uploaded:</label>
+<select id="crop-existing"><option value="">Select a picture</option>{{uploads}}</select>
+</div>
+<div id="crop-stage">
+<img id="crop-img" alt="The picture being cropped">
+<div id="crop-box" tabindex="0" role="group" aria-label="Crop box. Arrow keys move it, plus and minus resize it."><span id="crop-handle" aria-hidden="true"></span></div>
+</div>
+<p id="crop-note">Drag the box to move it. Drag the amber corner to make it bigger or smaller. Nothing is sent anywhere: the picture stays on your computer.</p>
+<div class="crop-tools">
+<button type="button" class="btn crop-btn" id="crop-save" disabled>Save cropped picture</button>
+<span id="crop-size"></span>
+</div>
+<script>
+(function () {
+  var R = 16 / 9, MAXW = 1600;
+  var img = document.getElementById('crop-img'), stage = document.getElementById('crop-stage');
+  var box = document.getElementById('crop-box'), handle = document.getElementById('crop-handle');
+  var save = document.getElementById('crop-save'), sizeNote = document.getElementById('crop-size');
+  var file = document.getElementById('crop-file'), existing = document.getElementById('crop-existing');
+  var c = { x: 0, y: 0, w: 0 }, name = 'picture', objectUrl = null;
+
+  function scale() { return img.clientWidth / img.naturalWidth; }
+  function clamp() {
+    var W = img.naturalWidth, H = img.naturalHeight;
+    var maxW = Math.min(W, H * R);
+    c.w = Math.max(Math.min(c.w, maxW), Math.min(maxW, 80));
+    c.x = Math.max(0, Math.min(c.x, W - c.w));
+    c.y = Math.max(0, Math.min(c.y, H - c.w / R));
+  }
+  function draw() {
+    clamp();
+    var s = scale();
+    box.style.left = c.x * s + 'px'; box.style.top = c.y * s + 'px';
+    box.style.width = c.w * s + 'px'; box.style.height = (c.w / R) * s + 'px';
+    var outW = Math.round(Math.min(c.w, MAXW));
+    sizeNote.textContent = 'Saved size: ' + outW + ' x ' + Math.round(outW / R) + ' pixels';
+  }
+  function load(src, label) {
+    name = (label || 'picture').replace(/\.[^.]+$/, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'picture';
+    img.onload = function () {
+      stage.classList.add('on'); save.disabled = false;
+      var W = img.naturalWidth, H = img.naturalHeight;
+      c.w = Math.min(W, H * R); c.x = (W - c.w) / 2; c.y = (H - c.w / R) / 2;
+      draw();
+    };
+    img.onerror = function () { stage.classList.remove('on'); save.disabled = true; sizeNote.textContent = 'That file could not be opened as a picture.'; };
+    img.src = src;
+  }
+  file.addEventListener('change', function () {
+    var f = file.files[0]; if (!f) return;
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(f); existing.value = ''; load(objectUrl, f.name);
+  });
+  existing.addEventListener('change', function () {
+    if (existing.value) load(existing.value, existing.options[existing.selectedIndex].text);
+  });
+
+  var drag = null;
+  function start(mode) {
+    return function (e) {
+      e.preventDefault(); e.stopPropagation();
+      drag = { mode: mode, px: e.clientX, py: e.clientY, x: c.x, y: c.y, w: c.w };
+      box.setPointerCapture(e.pointerId);
+    };
+  }
+  handle.addEventListener('pointerdown', start('size'));
+  box.addEventListener('pointerdown', start('move'));
+  box.addEventListener('pointermove', function (e) {
+    if (!drag) return;
+    var s = scale(), dx = (e.clientX - drag.px) / s, dy = (e.clientY - drag.py) / s;
+    if (drag.mode === 'move') { c.x = drag.x + dx; c.y = drag.y + dy; }
+    else {
+      var W = img.naturalWidth, H = img.naturalHeight;
+      c.w = Math.min(Math.max(drag.w + Math.max(dx, dy * R), 80), W - drag.x, (H - drag.y) * R);
+    }
+    draw();
+  });
+  function stop() { drag = null; }
+  box.addEventListener('pointerup', stop); box.addEventListener('pointercancel', stop);
+  box.addEventListener('keydown', function (e) {
+    var step = img.naturalWidth / 100, k = e.key;
+    if (k === 'ArrowLeft') c.x -= step; else if (k === 'ArrowRight') c.x += step;
+    else if (k === 'ArrowUp') c.y -= step; else if (k === 'ArrowDown') c.y += step;
+    else if (k === '+' || k === '=') c.w += step * 2; else if (k === '-') c.w -= step * 2;
+    else return;
+    e.preventDefault(); draw();
+  });
+  window.addEventListener('resize', function () { if (img.naturalWidth) draw(); });
+
+  save.addEventListener('click', function () {
+    var outW = Math.round(Math.min(c.w, MAXW)), outH = Math.round(outW / R);
+    var cv = document.createElement('canvas'); cv.width = outW; cv.height = outH;
+    var ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, outW, outH);
+    ctx.drawImage(img, c.x, c.y, c.w, c.w / R, 0, 0, outW, outH);
+    cv.toBlob(function (blob) {
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '-16x9.jpg';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+    }, 'image/jpeg', 0.88);
+  });
+})();
+</script>

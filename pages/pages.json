@@ -33,5 +33,12 @@
     "nav": "index.html",
     "band": true,
     "noindex": false
+  },
+  "crop": {
+    "title": "Crop a picture | West Berkshire Voice",
+    "description": "",
+    "nav": "",
+    "band": false,
+    "noindex": true
   }
 }

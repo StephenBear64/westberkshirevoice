@@ -154,6 +154,15 @@ write('news.html', page({
 
 for (const s of stories) write(s.url, storyPage(s));
 
+// The crop tool for contributors: lists the pictures already uploaded so one can be re-cropped.
+{
+  const dir = path.join(ROOT, 'static', 'img', 'uploads');
+  const files = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f)).sort() : [];
+  const options = files.map((f) => `<option value="img/uploads/${encodeURIComponent(f)}">${esc(f)}</option>`).join('');
+  const m = pageMeta.crop;
+  write('crop.html', page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: m.noindex, main: read('pages', 'crop.html').trim().replace('{{uploads}}', () => options) }));
+}
+
 for (const key of ['about', 'get-involved', 'contact', 'thanks']) {
   const m = pageMeta[key];
   write(`${key}.html`, page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: m.noindex, main: read('pages', `${key}.html`).trim() }));
