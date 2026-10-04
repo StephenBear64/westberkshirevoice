@@ -150,15 +150,17 @@ function wrongShape(src) {
   const size = pictureSize(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
   return !!size && size.h > 0 && Math.abs(size.w / size.h - 16 / 9) > 0.04;
 }
-const SHAPE_WARNING = '<p class="shape-warning"><strong>This picture is not 16:9.</strong> Part of it is being cut off, so it is likely not to look good online. <a href="crop.html">Crop it with the crop tool</a>, then upload the cropped picture in its place. This story cannot be published until that is done. This message is only shown on the drafts copy.</p>\n';
-// On the live site a published story with a picture that is not 16:9 stops the build, so the last good version stays online.
+const SHAPE_WARNING = '<p class="shape-warning"><strong>This picture is not 16:9.</strong> Part of it is being cut off, so it is likely not to look good online. <a href="crop.html">Crop it with the crop tool</a>, then upload the cropped picture in its place. This story will not appear on the live site until that is done. This message is only shown on the drafts copy.</p>\n';
+// On the live site a story with a picture that is not 16:9 is held back, as if it were still a draft.
+// Everything else publishes as normal, so one wrongly shaped picture never holds up other stories.
 if (IS_LIVE) {
-  const wrong = [];
-  for (const s of stories) {
-    if (s.image && !s.imageMissing && wrongShape(s.image)) wrong.push(`${s.slug}: main picture ${s.image}`);
-    for (const part of s.parts) if (part.type === 'picture' && part.image && !part.missing && wrongShape(part.image)) wrong.push(`${s.slug}: picture in the story ${part.image}`);
+  for (let i = stories.length - 1; i >= 0; i -= 1) {
+    const s = stories[i];
+    const wrong = [];
+    if (s.image && !s.imageMissing && wrongShape(s.image)) wrong.push(s.image);
+    for (const part of s.parts) if (part.type === 'picture' && part.image && !part.missing && wrongShape(part.image)) wrong.push(part.image);
+    if (wrong.length) { console.log(`Held back, not published (picture not 16:9): ${s.slug}\n  ${wrong.join('\n  ')}`); stories.splice(i, 1); }
   }
-  if (wrong.length) { console.error('Build stopped: these pictures are not 16:9. Crop them with the crop tool and upload the cropped versions.\n  ' + wrong.join('\n  ')); process.exit(1); }
 }
 const shapeWarning = (src) => (SHOW_DRAFTS && wrongShape(src) ? SHAPE_WARNING : '');
 const MISSING_BOX = '<span class="ph">Picture missing</span>';
