@@ -49,7 +49,7 @@ content:
         type: string
       - name: image
         label: Picture
-        description: House rule - all pictures are shown in 16:9 landscape. Other shapes are cropped from the centre, so use a landscape picture.
+        description: House rule - all pictures must be 16:9 landscape. A picture in any other shape will have part of it cut off and is likely not to look good online. Crop it first at drafts.westberkshirevoice.pages.dev/crop.html and upload the cropped picture.
         type: image
       - name: imageAlt
         label: Picture description
@@ -88,7 +88,7 @@ content:
             fields:
               - name: image
                 label: Picture
-                description: House rule - all pictures are shown in 16:9 landscape, cropped from the centre.
+                description: House rule - all pictures must be 16:9 landscape. A picture in any other shape will have part of it cut off and is likely not to look good online. Crop it first at drafts.westberkshirevoice.pages.dev/crop.html and upload the cropped picture.
                 type: image
                 required: true
               - name: imageAlt

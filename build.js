@@ -105,6 +105,53 @@ if (missing.length) {
   console.log('Pictures missing from static/img:\n  ' + missing.join('\n  '));
   if (IS_LIVE) { console.error('Build stopped: restore the missing pictures or remove them from the stories.'); process.exit(1); }
 }
+// ---- House rule: news pictures are 16:9. Read each uploaded picture's size so the drafts copy can warn about other shapes.
+function pictureSize(file) {
+  try {
+    const b = fs.readFileSync(file);
+    if (b.length > 24 && b.readUInt32BE(0) === 0x89504e47) return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+    if (b.toString('latin1', 0, 3) === 'GIF') return { w: b.readUInt16LE(6), h: b.readUInt16LE(8) };
+    if (b.toString('latin1', 0, 4) === 'RIFF' && b.toString('latin1', 8, 12) === 'WEBP') {
+      const kind = b.toString('latin1', 12, 16);
+      if (kind === 'VP8X') return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) };
+      if (kind === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+      if (kind === 'VP8L') { const n = b.readUInt32LE(21); return { w: 1 + (n & 0x3fff), h: 1 + ((n >> 14) & 0x3fff) }; }
+      return null;
+    }
+    if (b[0] === 0xff && b[1] === 0xd8) {
+      let i = 2, turned = false;
+      while (i + 9 < b.length) {
+        if (b[i] !== 0xff) { i += 1; continue; }
+        const m = b[i + 1];
+        if (m === 0xff) { i += 1; continue; }
+        if (m === 0xd8 || (m >= 0xd0 && m <= 0xd7) || m === 0x01) { i += 2; continue; }
+        const len = b.readUInt16BE(i + 2);
+        // Phone photos are often stored sideways with a note saying how to turn them.
+        if (m === 0xe1 && b.toString('latin1', i + 4, i + 8) === 'Exif') {
+          const t = i + 10, le = b.toString('latin1', t, t + 2) === 'II';
+          const u16 = (o) => (le ? b.readUInt16LE(o) : b.readUInt16BE(o));
+          const u32 = (o) => (le ? b.readUInt32LE(o) : b.readUInt32BE(o));
+          const ifd = t + u32(t + 4), n = u16(ifd);
+          for (let k = 0; k < n; k += 1) { const e = ifd + 2 + k * 12; if (u16(e) === 0x0112) turned = u16(e + 8) >= 5; }
+        }
+        if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) {
+          const h = b.readUInt16BE(i + 5), w = b.readUInt16BE(i + 7);
+          return turned ? { w: h, h: w } : { w, h };
+        }
+        i += 2 + len;
+      }
+    }
+  } catch (e) { /* unreadable: no warning */ }
+  return null;
+}
+// True when an uploaded picture is clearly not 16:9. Pictures hosted elsewhere cannot be checked.
+function wrongShape(src) {
+  if (!/^\/img\//.test(String(src || ''))) return false;
+  const size = pictureSize(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
+  return !!size && size.h > 0 && Math.abs(size.w / size.h - 16 / 9) > 0.04;
+}
+const SHAPE_WARNING = '<p class="shape-warning"><strong>This picture is not 16:9.</strong> Part of it is being cut off, so it is likely not to look good online. <a href="crop.html">Crop it with the crop tool</a>, then upload the cropped picture in its place. This message is only shown on the drafts copy.</p>\n';
+const shapeWarning = (src) => (SHOW_DRAFTS && wrongShape(src) ? SHAPE_WARNING : '');
 const MISSING_BOX = '<span class="ph">Picture missing</span>';
 
 function storyItem(s) {
@@ -114,11 +161,11 @@ function storyItem(s) {
 }
 
 function storyPage(s) {
-  const figure = s.image ? `<figure>${pic(s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`, s.credit)}${caption(s.caption)}</figure>\n` : '';
+  const figure = s.image ? `${s.imageMissing ? '' : shapeWarning(s.image)}<figure>${pic(s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`, s.credit)}${caption(s.caption)}</figure>\n` : '';
   const parts = s.parts.map((part) => {
     if (part.type === 'picture') {
       if (!part.image) return '';
-      return `<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
+      return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
     }
     return bodyHtml(part.text);
   }).filter(Boolean).join('\n');
