@@ -43,6 +43,7 @@ content:
         required: true
       - name: image
         label: Picture
+        description: House rule - all pictures are shown in 16:9 landscape. Other shapes are cropped from the centre, so use a landscape picture.
         type: image
       - name: imageAlt
         label: Picture description

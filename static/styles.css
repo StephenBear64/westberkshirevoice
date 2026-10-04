@@ -91,7 +91,8 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .nav .social+.social{margin-left:0}
 .nav .socials{margin-left:auto;display:inline-flex;align-items:center;flex-wrap:nowrap}
 .nav .socials .social{margin-left:0}
-.ph{display:flex;align-items:center;justify-content:center;aspect-ratio:3/2;width:100%;background:#E3E9E6;color:#3E4A55;font-size:15px;font-weight:700}
+.ph{display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;width:100%;background:#E3E9E6;color:#3E4A55;font-size:15px;font-weight:700}
 .story h2{margin:32px 0 0;font-size:26px;font-weight:800;line-height:1.15}
-.newsitem .thumb img{aspect-ratio:3/2;object-fit:cover;background:#E3E9E6}
-.story p img,.story>img{max-width:100%;height:auto}
+.newsitem .thumb img{aspect-ratio:16/9;object-fit:cover;background:#E3E9E6}
+/* House rule: every still picture is shown in 16:9 landscape, cropped from the centre. */
+.story img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#E3E9E6}
