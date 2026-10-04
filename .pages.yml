@@ -21,6 +21,25 @@ content:
         - draft
       sort: date
       order: desc
+    actions:
+      - name: publish
+        label: Publish to live site
+        scope: collection
+        workflow: publish.yml
+        cancelable: false
+        confirm:
+          title: Publish to the live site?
+          message: Every story that is not marked as a draft will appear on the public website in a minute or two. Only editors can publish.
+          button: Publish
+      - name: publish-from-story
+        label: Publish to live site
+        scope: entry
+        workflow: publish.yml
+        cancelable: false
+        confirm:
+          title: Publish to the live site?
+          message: Every story that is not marked as a draft will appear on the public website in a minute or two. Only editors can publish.
+          button: Publish
     fields:
       - name: title
         label: Headline
