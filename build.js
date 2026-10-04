@@ -87,10 +87,9 @@ const stories = fs.readdirSync(storyDir).filter((f) => f.endsWith('.json')).map(
 const IS_LIVE = branch === 'main';
 const missing = [];
 const localExists = (src) => !/^\/img\//.test(src) || fs.existsSync(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
-const caption = (text, credit) => {
-  const bits = [text ? esc(text) : '', credit ? `<span class="credit">Picture: ${esc(credit)}</span>` : ''].filter(Boolean);
-  return bits.length ? `<figcaption>${bits.join(' ')}</figcaption>` : '';
-};
+// The caption goes under the picture; the credit sits over its bottom left corner.
+const caption = (text) => (text ? `<figcaption>${esc(text)}</figcaption>` : '');
+const pic = (img, credit) => `<span class="pic">${img}${credit ? `<span class="credit">Picture: ${esc(credit)}</span>` : ''}</span>`;
 for (const s of stories) {
   // A story is a list of blocks: text and pictures. Older stories with a single "body" still work.
   s.parts = Array.isArray(s.content) && s.content.length ? s.content : [{ type: 'text', text: s.body || '' }];
@@ -115,11 +114,11 @@ function storyItem(s) {
 }
 
 function storyPage(s) {
-  const figure = s.image ? `<figure>${s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`}${caption(s.caption, s.credit)}</figure>\n` : '';
+  const figure = s.image ? `<figure>${pic(s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`, s.credit)}${caption(s.caption)}</figure>\n` : '';
   const parts = s.parts.map((part) => {
     if (part.type === 'picture') {
       if (!part.image) return '';
-      return `<figure class="inline">${part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`}${caption(part.caption, part.credit)}</figure>`;
+      return `<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
     }
     return bodyHtml(part.text);
   }).filter(Boolean).join('\n');
