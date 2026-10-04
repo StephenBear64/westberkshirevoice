@@ -222,5 +222,11 @@ for (const key of ['about', 'get-involved', 'contact', 'thanks', 'crop']) {
   write(`${key}.html`, page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: m.noindex, main: read('pages', `${key}.html`).trim() }));
 }
 
+// A proper "not found" page, so the address of a story that has been taken down does not show anything else.
+write('404.html', page({
+  title: 'Page not found | West Berkshire Voice', description: '', nav: '', showBand: false, noindex: true,
+  main: '<div class="prose"><p class="kicker">Page not found</p>\n<h1>This page is not available</h1>\n<p>The page you are looking for may have been removed, or the address may be wrong.</p>\n<p><a href="/news.html">See the latest news</a> or go to the <a href="/">home page</a>.</p></div>',
+}).replace(/(href|src)="(?!https?:|\/|#|mailto:)/g, '$1="/'));
+
 console.log(`Built ${stories.length} stories (${SHOW_DRAFTS ? 'drafts shown' : 'drafts hidden'}), home page shows ${latest.length}.`);
 if (problems.length) console.log('Skipped or incomplete:\n  ' + problems.join('\n  '));
