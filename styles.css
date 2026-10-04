@@ -62,7 +62,7 @@ footer nav{display:flex;flex-wrap:wrap;gap:20px}
 .story h1{font-size:clamp(32px,4.4vw,50px)}
 .story p{margin:18px 0 0}
 .story figure{margin:28px 0 8px}
-.story img{display:block;width:100%;height:auto}
+.story img{display:block;width:100%;height:auto;background:#E3E9E6}
 .story figcaption{margin-top:8px;font-size:14px;color:#3E4A55}
 .story .source{margin-top:32px;padding-top:18px;border-top:1px solid #C9D1CD;font-size:16px;color:#3E4A55}
 .newslist{margin-top:32px;display:flex;flex-direction:column;gap:28px;max-width:900px}
