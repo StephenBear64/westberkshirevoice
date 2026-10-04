@@ -69,7 +69,7 @@ content:
         type: string
       - name: image
         label: Picture
-        description: House rule - all pictures must be 16:9 landscape. A picture in any other shape will have part of it cut off and is likely not to look good online. Crop it first at drafts.westberkshirevoice.pages.dev/crop.html and upload the cropped picture. Pictures must always be uploaded here, never linked from another website.
+        description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
         type: image
       - name: imageAlt
         label: Picture description
@@ -108,7 +108,7 @@ content:
             fields:
               - name: image
                 label: Picture
-                description: House rule - all pictures must be 16:9 landscape. A picture in any other shape will have part of it cut off and is likely not to look good online. Crop it first at drafts.westberkshirevoice.pages.dev/crop.html and upload the cropped picture. Pictures must always be uploaded here, never linked from another website.
+                description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
                 type: image
                 required: true
               - name: imageAlt
