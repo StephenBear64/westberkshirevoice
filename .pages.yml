@@ -23,14 +23,14 @@ content:
       order: desc
     actions:
       - name: publish-story
-        label: Publish this story
+        label: Publish (after saving)
         scope: entry
         workflow: publish.yml
         cancelable: false
         confirm:
-          title: Publish this story?
-          message: Save first. This story, as last saved, will appear on the public website in a minute or two. No other story is affected. Only editors can publish.
-          button: Publish this story
+          title: Have you clicked Save?
+          message: Publishing sends the last SAVED version of this story to the public website, not what is on your screen. If you have changed anything since you last clicked Save, press Cancel, click Save, then press Publish again. No other story is affected. Only editors can publish.
+          button: Yes, publish the saved version
       - name: unpublish-story
         label: Take off live site
         scope: entry
