@@ -82,3 +82,5 @@ footer nav{display:flex;flex-wrap:wrap;gap:20px}
 .story figure{float:right;width:320px;max-width:45%;margin:6px 0 16px 28px}
 .story .source{clear:both}
 @media (max-width:560px){.story figure{float:none;width:100%;max-width:320px;margin:24px 0 8px}}
+footer .mission{display:block;padding-top:0}
+footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-width:920px;font-size:15px;line-height:1.55;color:#DCE3E9}
