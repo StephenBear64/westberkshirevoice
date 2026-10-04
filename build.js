@@ -81,14 +81,32 @@ const stories = fs.readdirSync(storyDir).filter((f) => f.endsWith('.json')).map(
   .filter((s) => SHOW_DRAFTS || !s.draft)
   .sort((a, b) => String(b.date).localeCompare(String(a.date)) || a.title.localeCompare(b.title));
 
+// ---- Safety check: every picture a story uses must exist in static/.
+// On the live site a missing picture stops the build, so the last good version stays online.
+// On preview and drafts copies the story is shown with a "Picture missing" box instead.
+const IS_LIVE = branch === 'main';
+const missing = [];
+const localExists = (src) => !/^\/img\//.test(src) || fs.existsSync(path.join(ROOT, 'static', decodeURIComponent(src.split(/[?#]/)[0])));
+for (const s of stories) {
+  if (s.image && !localExists(s.image)) { missing.push(`${s.slug}: main picture ${s.image}`); s.imageMissing = true; }
+  for (const m of String(s.body || '').matchAll(/<img[^>]+src="([^"]+)"/g)) {
+    if (!localExists(m[1])) missing.push(`${s.slug}: picture in the story text ${m[1]}`);
+  }
+}
+if (missing.length) {
+  console.log('Pictures missing from static/img:\n  ' + missing.join('\n  '));
+  if (IS_LIVE) { console.error('Build stopped: restore the missing pictures or remove them from the stories.'); process.exit(1); }
+}
+const MISSING_BOX = '<span class="ph">Picture missing</span>';
+
 function storyItem(s) {
-  const thumb = s.image ? `<a class="thumb" href="${s.url}" tabindex="-1" aria-hidden="true"><img src="${esc(s.image)}" alt="" loading="lazy"></a>\n` : '';
+  const thumb = s.image ? `<a class="thumb" href="${s.url}" tabindex="-1" aria-hidden="true">${s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="" loading="lazy">`}</a>\n` : '';
   const where = [s.town, longDate(s.date)].filter(Boolean).map(esc).join(' · ');
   return `<article class="newsitem">\n${thumb}<div><p class="meta">${where}${s.draft ? ' · DRAFT' : ''}</p>\n<h2><a href="${s.url}">${esc(s.title)}</a></h2>\n<p>${esc(s.summary)}</p></div>\n</article>`;
 }
 
 function storyPage(s) {
-  const figure = s.image ? `<figure><img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">${s.credit ? `<figcaption>Picture: ${esc(s.credit)}</figcaption>` : ''}</figure>\n` : '';
+  const figure = s.image ? `<figure>${s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`}${s.credit ? `<figcaption>Picture: ${esc(s.credit)}</figcaption>` : ''}</figure>\n` : '';
   const main = `<article class="story">${s.town ? `<p class="kicker">${esc(s.town)}</p>` : ''}
 <h1>${esc(s.title)}</h1>
 ${s.summary ? `<p class="lede">${esc(s.summary)}</p>\n` : ''}<p class="meta">Published ${longDate(s.date)}${s.draft ? ' · DRAFT, not shown on the live site' : ''}</p>

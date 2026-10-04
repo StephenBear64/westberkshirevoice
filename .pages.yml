@@ -3,6 +3,8 @@
 media:
   input: static/img/uploads
   output: /img/uploads
+  # Give every uploaded file a unique name, so one upload can never overwrite another.
+  rename: random
 content:
   - name: news
     label: News stories
