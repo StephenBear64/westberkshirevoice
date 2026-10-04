@@ -108,7 +108,7 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .story{max-width:650px}
 .story figure,.story figure.inline{float:none;width:100%;max-width:100%;margin:22px 0 4px;clear:both}
 .story figure.inline{margin:28px 0 10px}
-.story figcaption{text-align:left}
+.story figcaption{text-align:center}
 .story .meta{margin:14px 0 0;font-weight:400}
 .story .byline{margin:6px 0 0}
 .story .intro{font-weight:700}
