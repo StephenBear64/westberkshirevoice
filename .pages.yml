@@ -43,6 +43,10 @@ content:
         description: One or two sentences shown under the headline and in the news lists.
         type: text
         required: true
+      - name: byline
+        label: Byline
+        description: Optional. The writer's name only. The site adds the word "By" in front. Leave empty for no byline.
+        type: string
       - name: image
         label: Picture
         description: House rule - all pictures are shown in 16:9 landscape. Other shapes are cropped from the centre, so use a landscape picture.

@@ -125,7 +125,7 @@ function storyPage(s) {
   }).filter(Boolean).join('\n');
   const main = `<article class="story">${s.town ? `<p class="kicker">${esc(s.town)}</p>` : ''}
 <h1>${esc(s.title)}</h1>
-${s.summary ? `<p class="lede">${esc(s.summary)}</p>\n` : ''}<p class="meta">Published ${longDate(s.date)}${s.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
+${s.summary ? `<p class="lede">${esc(s.summary)}</p>\n` : ''}${String(s.byline || '').trim() ? `<p class="byline">By ${esc(String(s.byline).trim().replace(/^by\s+/i, ''))}</p>\n` : ''}<p class="meta">Published ${longDate(s.date)}${s.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
 ${figure}${parts}
 <p><a href="news.html">More news</a></p>
 </article>`;
