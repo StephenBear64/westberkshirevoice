@@ -22,24 +22,24 @@ content:
       sort: date
       order: desc
     actions:
-      - name: publish
-        label: Publish to live site
-        scope: collection
-        workflow: publish.yml
-        cancelable: false
-        confirm:
-          title: Publish to the live site?
-          message: Every story that is not marked as a draft will appear on the public website in a minute or two. Only editors can publish.
-          button: Publish
-      - name: publish-from-story
-        label: Publish to live site
+      - name: publish-story
+        label: Publish this story
         scope: entry
         workflow: publish.yml
         cancelable: false
         confirm:
-          title: Publish to the live site?
-          message: Every story that is not marked as a draft will appear on the public website in a minute or two. Only editors can publish.
-          button: Publish
+          title: Publish this story?
+          message: Save first. This story, as last saved, will appear on the public website in a minute or two. No other story is affected. Only editors can publish.
+          button: Publish this story
+      - name: unpublish-story
+        label: Take off live site
+        scope: entry
+        workflow: publish.yml
+        cancelable: false
+        confirm:
+          title: Take this story off the live site?
+          message: This story will disappear from the public website in a minute or two. It stays here in the editor as a draft. Only editors can do this.
+          button: Take it off
     fields:
       - name: title
         label: Headline
@@ -85,7 +85,7 @@ content:
         type: string
       - name: draft
         label: Draft
-        description: New stories start as drafts. A draft is never shown on the live website. An editor unticks this when the story is approved.
+        description: Shows whether this story is on the live website. You do not need to change it. An editor's Publish this story button unticks it, and Take off live site ticks it again.
         type: boolean
         default: true
       - name: content
