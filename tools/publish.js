@@ -7,7 +7,7 @@ const path = require('path');
 
 const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).trim();
 const say = (text) => { console.log(text); if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, text + '\n'); };
-const stop = (text) => { say('NOT DONE: ' + text); process.exit(1); };
+const stop = (text) => { say('NOT DONE: ' + text); console.log('::error::' + text); process.exit(1); };
 
 let payload = {};
 try { payload = JSON.parse(process.env.PAYLOAD || '{}'); } catch (e) { stop('the editor sent details that could not be read.'); }
