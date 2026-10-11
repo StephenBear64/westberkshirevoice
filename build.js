@@ -176,6 +176,16 @@ function storyItem(s) {
   return `<article class="newsitem">\n${thumb}<div><p class="meta">${where}${s.draft ? ' · DRAFT' : ''}</p>\n<h2><a href="${s.url}">${esc(s.title)}</a></h2>\n<p>${esc(s.summary)}</p></div>\n</article>`;
 }
 
+// Links to other websites inside a story open in a new tab, so readers stay on our site.
+function externalLinksNewTab(html) {
+  return String(html).replace(/<a\b([^>]*)>/gi, (tag, attrs) => {
+    const href = (/href\s*=\s*"([^"]*)"/i.exec(attrs) || [])[1] || '';
+    if (!/^(https?:)?\/\//i.test(href) || /^(https?:)?\/\/(www\.)?westberkshirevoice\.uk(\/|$)/i.test(href)) return tag;
+    let out = attrs.replace(/\s(target|rel)\s*=\s*"[^"]*"/gi, '');
+    return `<a${out} target="_blank" rel="noopener noreferrer">`;
+  });
+}
+
 function storyPage(s) {
   const figure = s.image ? `${s.imageMissing ? '' : shapeWarning(s.image)}<figure>${pic(s.imageMissing ? MISSING_BOX : `<img src="${esc(s.image)}" alt="${esc(s.imageAlt)}">`, s.credit)}${caption(s.caption)}</figure>\n` : '';
   const parts = s.parts.map((part) => {
@@ -183,7 +193,7 @@ function storyPage(s) {
       if (!part.image) return '';
       return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
     }
-    return (SHOW_DRAFTS && /<img[^>]+src="(https?:)?\/\//i.test(String(part.text || '')) ? LINK_WARNING : '') + bodyHtml(part.text);
+    return (SHOW_DRAFTS && /<img[^>]+src="(https?:)?\/\//i.test(String(part.text || '')) ? LINK_WARNING : '') + externalLinksNewTab(bodyHtml(part.text));
   }).filter(Boolean).join('\n');
   const main = `<article class="story">${s.town ? `<p class="kicker">${esc(s.town)}</p>` : ''}
 <h1>${esc(s.title)}</h1>
