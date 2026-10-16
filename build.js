@@ -18,7 +18,7 @@ const SHOW_DRAFTS = branch !== '' && branch !== 'main';
 const read = (...p) => fs.readFileSync(path.join(ROOT, ...p), 'utf8');
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-const NAV = [['index.html', 'Home'], ['news.html', 'News'], ['about.html', 'About'], ['get-involved.html', 'Get Involved'], ['contact.html', 'Contact']];
+const NAV = [['index.html', 'Home'], ['news.html', 'News'], ['lost-pets.html', 'Lost Pets'], ['about.html', 'About'], ['get-involved.html', 'Get Involved'], ['contact.html', 'Contact']];
 const layout = read('layout.html');
 const band = read('pages', '_band.html').trim();
 const pageMeta = JSON.parse(read('pages', 'pages.json'));
@@ -227,6 +227,89 @@ write('news.html', page({
 
 for (const s of stories) write(s.url, storyPage(s));
 
+// ---- Lost Pets: one file per pet in pets/, edited through the CMS like the news.
+// Listed lost first, then found, then died; newest "date last seen" first within each.
+const STATUS = { lost: { label: 'Lost', order: 0 }, found: { label: 'Found', order: 1 }, died: { label: 'Died', order: 2 } };
+const petDir = path.join(ROOT, 'pets');
+const pets = (fs.existsSync(petDir) ? fs.readdirSync(petDir) : []).filter((f) => f.endsWith('.json')).map((file) => {
+  let data;
+  try { data = JSON.parse(fs.readFileSync(path.join(petDir, file), 'utf8')); } catch (e) { problems.push(`pets/${file}: not valid JSON (${e.message})`); return null; }
+  const slug = file.replace(/\.json$/, '');
+  if (!data.title) problems.push(`pets/${file}: no pet's name`);
+  if (!longDate(data.date)) problems.push(`pets/${file}: no date last seen`);
+  return { ...data, status: STATUS[data.status] ? data.status : 'lost', slug, url: `${slug}.html` };
+}).filter(Boolean)
+  .filter((p) => p.title && longDate(p.date))
+  .filter((p) => SHOW_DRAFTS || !p.draft)
+  .sort((a, b) => STATUS[a.status].order - STATUS[b.status].order || String(b.date).localeCompare(String(a.date)) || a.title.localeCompare(b.title));
+
+// The same picture rules as the news: hosted on our site, 16:9, and present.
+const petMissing = [];
+for (const p of pets) {
+  p.parts = Array.isArray(p.content) ? p.content : [];
+  if (p.image && !localExists(p.image)) { petMissing.push(`${p.slug}: main picture ${p.image}`); p.imageMissing = true; }
+  for (const part of p.parts) if (part.type === 'picture' && part.image && !localExists(part.image)) { petMissing.push(`${p.slug}: picture ${part.image}`); part.missing = true; }
+}
+if (petMissing.length) {
+  console.log('Pet pictures missing from static/img:\n  ' + petMissing.join('\n  '));
+  if (IS_LIVE) { console.error('Build stopped: restore the missing pictures or remove them from the pets.'); process.exit(1); }
+}
+if (IS_LIVE) {
+  for (let i = pets.length - 1; i >= 0; i -= 1) {
+    const p = pets[i];
+    const wrong = [];
+    if (p.image && (notOurs(p.image) || wrongShape(p.image))) wrong.push(p.image);
+    for (const part of p.parts) if (part.type === 'picture' && part.image && (notOurs(part.image) || wrongShape(part.image))) wrong.push(part.image);
+    for (const part of p.parts) for (const m of String(part.text || '').matchAll(/<img[^>]+src="([^"]+)"/g)) if (notOurs(m[1])) wrong.push(m[1]);
+    if (wrong.length) { console.log(`Held back, not published (picture not 16:9 or not hosted on our site): ${p.slug}\n  ${wrong.join('\n  ')}`); pets.splice(i, 1); }
+  }
+}
+
+const badge = (p) => `<span class="status status-${p.status}">${STATUS[p.status].label}</span>`;
+// A pet that has died gets a rainbow border round its picture.
+const petPic = (p, inner) => (p.status === 'died' ? `<span class="rainbow">${inner}</span>` : inner);
+
+function petItem(p) {
+  const thumb = p.image ? `<a class="thumb" href="${p.url}" tabindex="-1" aria-hidden="true">${petPic(p, p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="" loading="lazy">`)}</a>\n` : '';
+  const seen = ['Last seen ' + longDate(p.date), p.location].filter(Boolean).map(esc).join(' · ');
+  const meta = [badge(p), esc(p.petType)].filter(Boolean).join(' · ');
+  return `<article class="newsitem petitem pet-${p.status}">\n${thumb}<div><p class="meta">${meta}${p.draft ? ' · DRAFT' : ''}</p>\n<h2><a href="${p.url}">${esc(p.title)}</a></h2>\n<p>${seen}</p></div>\n</article>`;
+}
+
+function petPage(p) {
+  const figure = p.image ? `${p.imageMissing ? '' : shapeWarning(p.image)}<figure>${petPic(p, pic(p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}">`, p.credit))}${caption(p.caption)}</figure>\n` : '';
+  const phone = String(p.phone || '').trim();
+  const email = String(p.email || '').trim();
+  const facts = [
+    ['Date last seen', esc(longDate(p.date))],
+    ['Location last seen', esc(p.location)],
+    ['Owner', esc(p.owner)],
+    ['Phone', phone ? `<a href="tel:${esc(phone.replace(/[^\d+]/g, ''))}">${esc(phone)}</a>` : ''],
+    ['Email', email ? `<a href="mailto:${esc(email)}">${esc(email)}</a>` : ''],
+  ].filter(([, v]) => v).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  const parts = p.parts.map((part) => {
+    if (part.type === 'picture') {
+      if (!part.image) return '';
+      return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
+    }
+    return (SHOW_DRAFTS && /<img[^>]+src="(https?:)?\/\//i.test(String(part.text || '')) ? LINK_WARNING : '') + externalLinksNewTab(bodyHtml(part.text));
+  }).filter(Boolean).join('\n');
+  const main = `<article class="story pet pet-${p.status}"><p class="kicker">Lost Pets</p>
+<h1>${esc(p.title)}</h1>
+<p class="meta">${[badge(p), esc(p.petType)].filter(Boolean).join(' · ')}${p.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
+${figure}${facts ? `<dl class="petfacts">${facts}</dl>\n` : ''}${parts}
+<p><a href="lost-pets.html">More lost pets</a></p>
+</article>`;
+  const description = `${p.title}${p.petType ? `, ${p.petType}` : ''}. ${STATUS[p.status].label}. Last seen ${longDate(p.date)}${p.location ? ` in ${p.location}` : ''}.`;
+  return page({ title: `${p.title} | Lost Pets | West Berkshire Voice`, description, nav: 'lost-pets.html', main });
+}
+
+write('lost-pets.html', page({
+  title: 'Lost Pets | West Berkshire Voice', description: 'Lost and found pets in West Berkshire.', nav: 'lost-pets.html',
+  main: `${read('pages', 'lost-pets.html').trim()}\n<div class="newslist">\n${pets.length ? pets.map(petItem).join('\n') : '<p>No lost pets listed at the moment.</p>'}\n</div>`,
+}));
+for (const p of pets) write(p.url, petPage(p));
+
 for (const key of ['about', 'get-involved', 'contact', 'thanks', 'crop']) {
   const m = pageMeta[key];
   write(`${key}.html`, page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: m.noindex, main: read('pages', `${key}.html`).trim() }));
@@ -243,7 +326,7 @@ write('404.html', page({
 {
   let removed = [];
   try { removed = JSON.parse(read('removed.json')); } catch (e) { /* none */ }
-  const live = new Set(stories.map((s) => s.slug));
+  const live = new Set([...stories, ...pets].map((s) => s.slug));
   const gone = `<div class="prose">\n<p class="kicker">Page removed</p>\n<h1>Sorry, that page is not here</h1>\n<p>This page has been removed.</p>\n<p><a class="btn btn-amber" href="news.html">See the latest news</a></p>\n</div>`;
   for (const slug of removed) {
     if (!/^[^/\\]+$/.test(String(slug)) || live.has(slug)) continue;
@@ -257,5 +340,5 @@ write('404.html', page({
   write('404.html', page({ title: m.title, description: m.description, nav: m.nav, showBand: m.band, noindex: true, main: read('pages', '404.html').trim() }).replace('<head>', '<head>\n<base href="/">'));
 }
 
-console.log(`Built ${stories.length} stories (${SHOW_DRAFTS ? 'drafts shown' : 'drafts hidden'}), home page shows ${latest.length}.`);
+console.log(`Built ${stories.length} stories and ${pets.length} pets (${SHOW_DRAFTS ? 'drafts shown' : 'drafts hidden'}), home page shows ${latest.length}.`);
 if (problems.length) console.log('Skipped or incomplete:\n  ' + problems.join('\n  '));
