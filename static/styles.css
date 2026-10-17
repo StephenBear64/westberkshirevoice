@@ -114,3 +114,26 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .story .intro{font-weight:700}
 @media (max-width:560px){.story figure{max-width:100%;margin:20px 0 4px}}
 .story .shape-warning{margin:22px 0 0;padding:12px 14px;background:#FFF4E0;border-left:6px solid #F2A33A;font-size:16px;color:#12304A}
+/* Lost Pets */
+.status{display:inline-block;padding:1px 8px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#B3261E}
+.status-found{background:#165A4A}
+.status-died{background:#5A5F66}
+.rainbow{display:block;padding:6px;background:linear-gradient(90deg,#E40303,#FF8C00,#FFED00,#008026,#24408E,#732982)}
+.rainbow img,.rainbow .ph{display:block}
+.story .rainbow .pic{display:block}
+.petfacts{margin:22px 0 0;padding:16px 18px;background:#F1F4F2;border-top:4px solid #12304A;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 24px}
+.petfacts div{min-width:0}
+.petfacts dt{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#165A4A}
+.petfacts dd{margin:2px 0 0;font-weight:700;overflow-wrap:anywhere}
+.story.pet .meta{font-weight:700}
+/* Get Involved: Kitchener with the "needs you" heading, centred together at the top */
+.needsyou{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin:0 auto 32px;max-width:900px}
+.needsyou img{flex:0 0 auto;width:260px;max-width:60%;height:auto}
+.needsyou h1{flex:0 1 auto;margin:0;text-align:center;text-transform:uppercase;font-weight:800;line-height:1.05;letter-spacing:-.01em;color:#000;font-size:clamp(26px,3.6vw,40px)}
+.needsyou h1 span{display:block}
+.needsyou h1 .you{color:#C8102E;font-size:2.6em;line-height:.95;margin-top:6px}
+@media (max-width:560px){.needsyou{gap:16px}.needsyou img{width:200px}}
+.needsyou{max-width:720px;margin-left:0;margin-right:0}
+footer .footbrand{display:inline-flex;align-items:center;gap:10px}
+footer .footbrand svg{flex:0 0 auto}
+footer nav a{text-decoration:none}
