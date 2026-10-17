@@ -126,14 +126,10 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .petfacts dt{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#165A4A}
 .petfacts dd{margin:2px 0 0;font-weight:700;overflow-wrap:anywhere}
 .story.pet .meta{font-weight:700}
-/* Get Involved: Kitchener with "needs you" headline */
-.needsyou{display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-bottom:28px;max-width:900px}
+/* Get Involved: Kitchener with the "needs you" heading, centred together at the top */
+.needsyou{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin:0 auto 32px;max-width:900px}
 .needsyou img{flex:0 0 auto;width:260px;max-width:60%;height:auto}
-.needsyou h1{flex:1 1 300px;margin:0;color:#C8102E;text-transform:uppercase;font-weight:800;font-size:clamp(38px,6vw,68px);line-height:1;letter-spacing:-.01em}
-@media (max-width:560px){.needsyou{gap:18px}.needsyou img{width:200px}}
-.needsyou h1{text-align:right;font-size:clamp(36px,5.5vw,62px);line-height:1.05}
+.needsyou h1{flex:0 1 auto;margin:0;text-align:center;text-transform:uppercase;font-weight:800;line-height:1.05;letter-spacing:-.01em;color:#000;font-size:clamp(26px,3.6vw,40px)}
 .needsyou h1 span{display:block}
-.needsyou h1 .you{font-size:1.6em;line-height:.95;margin-top:4px}
-.needsyou h1 .who{color:#000;font-size:.62em;line-height:1.1}
-.needsyou h1 .you{font-size:1.9em}
-.needsyou h1{text-align:center}
+.needsyou h1 .you{color:#C8102E;font-size:2.6em;line-height:.95;margin-top:6px}
+@media (max-width:560px){.needsyou{gap:16px}.needsyou img{width:200px}}
