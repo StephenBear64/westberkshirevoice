@@ -126,3 +126,8 @@ footer .mission p{margin:0;padding-top:22px;border-top:1px solid #3A5670;max-wid
 .petfacts dt{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#165A4A}
 .petfacts dd{margin:2px 0 0;font-weight:700;overflow-wrap:anywhere}
 .story.pet .meta{font-weight:700}
+/* Get Involved: Kitchener with "needs you" headline */
+.needsyou{display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-bottom:28px;max-width:900px}
+.needsyou img{flex:0 0 auto;width:260px;max-width:60%;height:auto}
+.needsyou h1{flex:1 1 300px;margin:0;color:#C8102E;text-transform:uppercase;font-weight:800;font-size:clamp(38px,6vw,68px);line-height:1;letter-spacing:-.01em}
+@media (max-width:560px){.needsyou{gap:18px}.needsyou img{width:200px}}
