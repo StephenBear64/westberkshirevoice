@@ -3,7 +3,7 @@
   "date": "2026-10-18T15:09",
   "town": "Thatcham",
   "summary": "Saturday saw a number of events attracting local people as as part of Thatcham Town Council's annual festival festival where the best of Thatcham was on show.",
-  "byline": "Bear Stephens",
+  "byline": "Sarah Harding",
   "image": "/img/uploads/mvdwm50y-yksuvd21.jpg",
   "imageAlt": "Celia Camplin displays her hand knitted animals for sale",
   "caption": "A lady stood by a table packed with knitted animal toys, which she is offering for sale",
@@ -22,6 +22,12 @@
     {
       "type": "text",
       "text": "<p>Elsewhere in the town, an event was held, looking at the historical and modern uses of different plants. The 'Herbal Histories' event in the Jubilee Sensory Garden next to the Thatcham Town Council offices gave visitors the opportunity to join a walk and talk around the Sensory Garden and to learn how to make an herbal balm to take home.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mvdy0xoh-nmprjfq0.jpg",
+      "imageAlt": "A picture of a raised box containing various plants at the Jubilee Sensory Garden",
+      "caption": "Jubilee Sensory Garden"
     }
   ]
 }
