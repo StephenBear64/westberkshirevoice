@@ -229,6 +229,7 @@ for (const s of stories) write(s.url, storyPage(s));
 
 // ---- Lost Pets: one file per pet in pets/, edited through the CMS like the news.
 // Listed lost first, then found, then died; newest "date last seen" first within each.
+const GENDER = { male: 'Male', female: 'Female', unknown: 'Not known' };
 const STATUS = { lost: { label: 'Lost', order: 0 }, found: { label: 'Found', order: 1 }, died: { label: 'Died', order: 2 } };
 const petDir = path.join(ROOT, 'pets');
 const pets = (fs.existsSync(petDir) ? fs.readdirSync(petDir) : []).filter((f) => f.endsWith('.json')).map((file) => {
@@ -237,7 +238,7 @@ const pets = (fs.existsSync(petDir) ? fs.readdirSync(petDir) : []).filter((f) =>
   const slug = file.replace(/\.json$/, '');
   if (!data.title) problems.push(`pets/${file}: no pet's name`);
   if (!longDate(data.date)) problems.push(`pets/${file}: no date last seen`);
-  return { ...data, status: STATUS[data.status] ? data.status : 'lost', slug, url: `${slug}.html` };
+  return { ...data, status: STATUS[data.status] ? data.status : 'lost', gender: GENDER[data.gender] ? data.gender : 'unknown', slug, url: `${slug}.html` };
 }).filter(Boolean)
   .filter((p) => p.title && longDate(p.date))
   .filter((p) => SHOW_DRAFTS || !p.draft)
@@ -267,20 +268,24 @@ if (IS_LIVE) {
 
 const badge = (p) => `<span class="status status-${p.status}">${STATUS[p.status].label}</span>`;
 // A pet that has died gets a rainbow border round its picture.
+// Lost Pets has no picture descriptions or credits: the pet's name and type describe the picture.
+const petAlt = (p) => [p.title, p.petType].filter(Boolean).join(', ');
+const petMeta = (p) => [badge(p), esc(p.petType), p.gender !== 'unknown' ? GENDER[p.gender] : ''].filter(Boolean).join(' · ');
 const petPic = (p, inner) => (p.status === 'died' ? `<span class="rainbow">${inner}</span>` : inner);
 
 function petItem(p) {
   const thumb = p.image ? `<a class="thumb" href="${p.url}" tabindex="-1" aria-hidden="true">${petPic(p, p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="" loading="lazy">`)}</a>\n` : '';
   const seen = ['Last seen ' + longDate(p.date), p.location].filter(Boolean).map(esc).join(' · ');
-  const meta = [badge(p), esc(p.petType)].filter(Boolean).join(' · ');
+  const meta = petMeta(p);
   return `<article class="newsitem petitem pet-${p.status}">\n${thumb}<div><p class="meta">${meta}${p.draft ? ' · DRAFT' : ''}</p>\n<h2><a href="${p.url}">${esc(p.title)}</a></h2>\n<p>${seen}</p></div>\n</article>`;
 }
 
 function petPage(p) {
-  const figure = p.image ? `${p.imageMissing ? '' : shapeWarning(p.image)}<figure>${petPic(p, pic(p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}">`, p.credit))}${caption(p.caption)}</figure>\n` : '';
+  const figure = p.image ? `${p.imageMissing ? '' : shapeWarning(p.image)}<figure>${petPic(p, pic(p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="${esc(petAlt(p))}">`, ''))}${caption(p.caption)}</figure>\n` : '';
   const phone = String(p.phone || '').trim();
   const email = String(p.email || '').trim();
   const facts = [
+    ['Gender', GENDER[p.gender]],
     ['Date last seen', esc(longDate(p.date))],
     ['Location last seen', esc(p.location)],
     ['Owner', esc(p.owner)],
@@ -290,17 +295,17 @@ function petPage(p) {
   const parts = p.parts.map((part) => {
     if (part.type === 'picture') {
       if (!part.image) return '';
-      return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.imageAlt || part.caption)}">`, part.credit)}${caption(part.caption)}</figure>`;
+      return `${part.missing ? '' : shapeWarning(part.image)}<figure class="inline">${pic(part.missing ? MISSING_BOX : `<img src="${esc(part.image)}" alt="${esc(part.caption || petAlt(p))}">`, '')}${caption(part.caption)}</figure>`;
     }
     return (SHOW_DRAFTS && /<img[^>]+src="(https?:)?\/\//i.test(String(part.text || '')) ? LINK_WARNING : '') + externalLinksNewTab(bodyHtml(part.text));
   }).filter(Boolean).join('\n');
   const main = `<article class="story pet pet-${p.status}"><p class="kicker">Lost Pets</p>
 <h1>${esc(p.title)}</h1>
-<p class="meta">${[badge(p), esc(p.petType)].filter(Boolean).join(' · ')}${p.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
+<p class="meta">${petMeta(p)}${p.draft ? ' · DRAFT, not shown on the live site' : ''}</p>
 ${figure}${facts ? `<dl class="petfacts">${facts}</dl>\n` : ''}${parts}
 <p><a href="lost-pets.html">More lost pets</a></p>
 </article>`;
-  const description = `${p.title}${p.petType ? `, ${p.petType}` : ''}. ${STATUS[p.status].label}. Last seen ${longDate(p.date)}${p.location ? ` in ${p.location}` : ''}.`;
+  const description = `${p.title}${p.petType ? `, ${p.petType}` : ''}${p.gender !== 'unknown' ? `, ${GENDER[p.gender].toLowerCase()}` : ''}. ${STATUS[p.status].label}. Last seen ${longDate(p.date)}${p.location ? ` in ${p.location}` : ''}.`;
   return page({ title: `${p.title} | Lost Pets | West Berkshire Voice`, description, nav: 'lost-pets.html', main });
 }
 

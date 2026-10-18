@@ -75,7 +75,7 @@ content:
         type: string
       - name: image
         label: Picture
-        description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
+        description: "IMPORTANT - ALL PICTURES MUST BE 16:9 LANDSCAPE FORMAT. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
         type: image
       - name: imageAlt
         label: Picture description
@@ -114,7 +114,7 @@ content:
             fields:
               - name: image
                 label: Picture
-                description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
+                description: "IMPORTANT - ALL PICTURES MUST BE 16:9 LANDSCAPE FORMAT. If you attempt to use any other format, the story will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
                 type: image
                 required: true
               - name: imageAlt
@@ -175,6 +175,19 @@ content:
         description: For example dog, cat, bird or hamster. Add the breed if you know it.
         type: string
         required: true
+      - name: gender
+        label: Gender
+        type: select
+        default: unknown
+        required: true
+        options:
+          values:
+            - value: male
+              label: Male
+            - value: female
+              label: Female
+            - value: unknown
+              label: Not known
       - name: status
         label: Status
         description: Lost pets are listed first, then found, then died. A pet that has died is shown with a rainbow border round its picture.
@@ -191,17 +204,9 @@ content:
               label: Died
       - name: image
         label: Picture
-        description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the pet will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
+        description: "IMPORTANT - ALL PICTURES MUST BE 16:9 LANDSCAPE FORMAT. If you attempt to use any other format, the pet will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
         type: image
         required: true
-      - name: imageAlt
-        label: Picture description
-        description: A short description of what the picture shows, for people who cannot see it.
-        type: string
-      - name: credit
-        label: Picture credit
-        description: The owner's or photographer's name if it is not our own picture. The site adds the word "Picture:" in front.
-        type: string
       - name: caption
         label: Picture caption
         description: Optional. Shown under the picture.
@@ -251,19 +256,10 @@ content:
             fields:
               - name: image
                 label: Picture
-                description: "IMPORTANT - All pictures must be 16:9 landscape format. If you attempt to use any other format, the pet will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
+                description: "IMPORTANT - ALL PICTURES MUST BE 16:9 LANDSCAPE FORMAT. If you attempt to use any other format, the pet will fail to publish without warning. There is a cropping tool that you can use at the following web address, which has step-by-step instructions and is easy to use. westberkshirevoice.uk/crop"
                 type: image
-                required: true
-              - name: imageAlt
-                label: Picture description
-                description: What the picture shows, for people who cannot see it.
-                type: string
                 required: true
               - name: caption
                 label: Caption
                 description: Shown under the picture.
-                type: string
-              - name: credit
-                label: Picture credit
-                description: The provider's name only. The site adds the word "Picture:" in front.
                 type: string
