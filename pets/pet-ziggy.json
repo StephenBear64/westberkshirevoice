@@ -1,6 +1,7 @@
 {
   "title": "Ziggy",
   "petType": "Cat",
+  "gender": "male",
   "status": "lost",
   "image": "/img/uploads/mve9c0mm-r2l0w5pz.jpg",
   "caption": "Ziggy - taken in September 2026",
