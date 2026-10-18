@@ -10,7 +10,7 @@
   "owner": "Jane Shagmore",
   "phone": "07625 827262",
   "email": "janesh4it@gmail.com",
-  "draft": true,
+  "draft": false,
   "content": [
     {
       "type": "text",
