@@ -31,13 +31,17 @@
     },
     {
       "type": "text",
-      "text": "<p>The Broadway was busy after being taken over by local clubs and societies, showcasing what they do and hoping to recruit some new members. A popular attraction was the gazebo hosted by <a href=\"https://www.newburyastro.org.uk/\">Newbury Astronomical Society</a> (NAS). They members shared pictures and displayed various telescopes for visitors to try looking through.</p><p>The star attraction on the NAS display was a telescope fitted with a solar filter allowing people to safely observe the sun. Steve Harris from the NAS said this was particularly useful during the practical social eclipse on 12th August. NAS welcomes new members and is currently running evening meetings for beginners.</p>"
+      "text": "<p>The Broadway was busy after being taken over by local clubs and societies, showcasing what they do and hoping to recruit some new members. A popular attraction was the gazebo hosted by <a href=\"https://www.newburyastro.org.uk/\">Newbury Astronomical Society</a> (NAS). The members shared pictures and displayed various telescopes for visitors to try looking through.</p><p>The star attraction on the NAS display was a telescope fitted with a solar filter allowing people to safely observe the sun. Steve Harris from the NAS said this was particularly useful during the practical social eclipse on 12th August. NAS welcomes new members and is currently running evening meetings for beginners.</p>"
     },
     {
       "type": "picture",
       "image": "/img/uploads/mve133mt-zc69ebk4.jpg",
       "imageAlt": "A man looking into a telescope",
       "caption": "Steve Harris from Newbury Astronomical Society observing the sun"
+    },
+    {
+      "type": "text",
+      "text": "<p>The Thatcham branch of University of the Third Age (u3a) had its gazebo in the Broadway. The u3a welcomes retired people who want to meet other like minded people who enjoy attending talks, activities and learning new skills. The Thatcham u3a has regular coffee mornings and meetings around Thatcham.</p>"
     }
   ]
 }
