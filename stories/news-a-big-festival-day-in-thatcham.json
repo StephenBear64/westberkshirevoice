@@ -1,0 +1,65 @@
+{
+  "title": "A big festival day in Thatcham",
+  "date": "2026-10-18T15:09",
+  "town": "Thatcham",
+  "summary": "Saturday saw a number of events across Thatcham as part of the Thatcham Festival, Thatcham Town Council's annual celebration of the best of the town. Our team was out and about reporting from the events.",
+  "byline": "Sarah Harding",
+  "image": "/img/uploads/mvdwm50y-yksuvd21.jpg",
+  "imageAlt": "A woman standing by a table of knitted animal toys for sale",
+  "caption": "Celia Camplin with her hand-knitted toys for sale",
+  "draft": false,
+  "content": [
+    {
+      "type": "text",
+      "text": "<p>Saturday was a big day in Thatcham, as organisations across the town held events showcasing the best of what they do.</p><p>St Mary's Church was a popular venue, where more than 100 people came to buy from the many stalls at the craft fair, listen to the music, and enjoy a cup of tea and a cake. Celia Camplin (pictured above) was one of the many stallholders, offering her hand-knitted toys to visitors.</p><p>The <a href=\"https://www.thatchamhistoricalsociety.org.uk/\">Thatcham Historical Society</a> was also at the church, where members displayed pictures and told visitors about the history of Thatcham, from the earliest prehistoric life and the first human settlements through to the modern town it is today.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mvdxojrv-o2va1z89.jpg",
+      "imageAlt": "The Thatcham Historical Society stand at St Mary's Church during the Thatcham Festival",
+      "caption": "Visitors to the Thatcham Historical Society stand learn about the town's history"
+    },
+    {
+      "type": "text",
+      "text": "<p>Elsewhere in the town, an event looked at the historical and modern uses of different plants. Herbal Histories, in the Jubilee Sensory Garden next to the Thatcham Town Council offices, gave visitors the chance to join a walk and talk around the garden and learn how to make a herbal balm to take home.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mvdy0xoh-nmprjfq0.jpg",
+      "imageAlt": "A picture of a raised box containing various plants at the Jubilee Sensory Garden",
+      "caption": "The Jubilee Sensory Garden next to Thatcham Town Council's offices",
+      "credit": "Thatcham Town Council (library picture)"
+    },
+    {
+      "type": "text",
+      "text": "<p>The Broadway was busy, taken over by local clubs and societies showcasing what they do and hoping to recruit new members. A popular attraction was the gazebo hosted by <a href=\"https://www.newburyastro.org.uk/\">Newbury Astronomical Society</a> (NAS), where members shared pictures and displayed various telescopes for visitors to try.</p><p>The star attraction on the NAS stand was a telescope fitted with a solar filter, allowing people to observe the sun safely. Steve Harris from the NAS said this was particularly useful during the partial solar eclipse on 12 August. The society welcomes new members and is running evening meetings for beginners.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mve133mt-zc69ebk4.jpg",
+      "imageAlt": "A man looking into a telescope",
+      "caption": "Steve Harris from Newbury Astronomical Society observes the sun through a filtered telescope"
+    },
+    {
+      "type": "text",
+      "text": "<p>The <a href=\"https://www.thatchamu3asite.uk\">Thatcham branch of the University of the Third Age</a> (u3a) also had a gazebo on The Broadway. The u3a welcomes retired people who want to meet like-minded people and enjoy talks, activities and learning new skills. Thatcham u3a holds regular coffee mornings and meetings around the town.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mve1ggc8-telh8set.jpg",
+      "imageAlt": "A gazebo on The Broadway staffed by u3a members",
+      "caption": "Members of Thatcham u3a explain what they do to visitors on The Broadway"
+    },
+    {
+      "type": "text",
+      "text": "<p><a href=\"https://nadhack.org.uk/\">Newbury and District Hackspace</a> held a retro computer and video gaming exhibition at its home next to The Moors Playing Fields in Thatcham. The event showed early home computers and video games from the 1970s onwards and let visitors have a go. Working examples on display included the Commodore PET and the BBC Micro, offering excitement for younger visitors and nostalgia for those who grew up in the 1970s and 80s.</p><p>Hackspace members create, craft, mend, repurpose, share, teach and learn in a community workshop with modern professional equipment. Members can learn about laser cutting, 3D printing, metalworking, electronics, CAD and CAM software, and more.</p>"
+    },
+    {
+      "type": "picture",
+      "image": "/img/uploads/mve24b7f-ihggyzos.jpg",
+      "imageAlt": "A picture of old computer systems dating back to the 1970s on show at an exhibition",
+      "caption": "Early home computers on display at Newbury and District Hackspace's exhibition",
+      "credit": "Newbury and District Hackspace"
+    }
+  ]
+}
