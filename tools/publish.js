@@ -53,6 +53,7 @@ if (unpublish) {
   if (git('diff', '--cached', '--name-only') !== '') git('commit', '-q', '-m', `Unpublish: ${title}`);
 } else {
   setRemoved(false);
+  fs.mkdirSync(path.dirname(story), { recursive: true }); // the pets folder does not exist on the live site until the first pet is published
   fs.writeFileSync(story, flagged(false));
   // Bring the story's own pictures with it.
   const pictures = [...new Set((draftsText.match(/\/img\/[^"\\?#]+/g) || []).map((p) => 'static' + decodeURIComponent(p)))];
