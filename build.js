@@ -23,9 +23,19 @@ const layout = read('layout.html');
 const band = read('pages', '_band.html').trim();
 const pageMeta = JSON.parse(read('pages', 'pages.json'));
 
-function page({ title, description, nav, main, showBand = true, noindex = false }) {
+// Preview tags for Facebook, WhatsApp, LinkedIn and others when someone shares a link. Only the home page has them for now.
+const SITE = 'https://westberkshirevoice.uk';
+function shareTags({ title, description, image, url }) {
+  return [
+    ['og:type', 'website'], ['og:site_name', 'West Berkshire Voice'], ['og:title', title], ['og:description', description],
+    ['og:url', SITE + url], ['og:image', SITE + image], ['og:image:width', '1200'], ['og:image:height', '630'], ['og:image:alt', 'West Berkshire Voice logo'],
+  ].map(([k, v]) => `<meta property="${k}" content="${esc(v)}">`).join('\n')
+    + `\n<meta name="twitter:card" content="summary_large_image">`;
+}
+
+function page({ title, description, nav, main, showBand = true, noindex = false, share = null }) {
   const links = NAV.map(([href, label]) => `<a href="${href}"${href === nav ? ' aria-current="page"' : ''}>${label}</a>`).join('');
-  const meta = (noindex || SHOW_DRAFTS) ? '<meta name="robots" content="noindex">' : `<meta name="description" content="${esc(description)}">`;
+  const meta = ((noindex || SHOW_DRAFTS) ? '<meta name="robots" content="noindex">' : `<meta name="description" content="${esc(description)}">`) + (share ? '\n' + shareTags(share) : '');
   return layout
     .replace('{{title}}', () => esc(title))
     .replace('{{meta}}', () => meta)
@@ -218,7 +228,7 @@ ${latest.map(storyItem).join('\n')}
 </div>
 <p class="more"><a href="news.html">All news</a></p>
 </section>\n` : '';
-write('index.html', page({ ...pageMeta.index, showBand: pageMeta.index.band, main: `${read('pages', 'home-top.html').trim()}\n${latestBlock}${read('pages', 'home-bottom.html').trim()}` }));
+write('index.html', page({ ...pageMeta.index, showBand: pageMeta.index.band, share: { title: 'West Berkshire Voice', description: 'Your local community news and information hub', image: '/img/share-logo.png', url: '/' }, main: `${read('pages', 'home-top.html').trim()}\n${latestBlock}${read('pages', 'home-bottom.html').trim()}` }));
 
 write('news.html', page({
   title: 'News | West Berkshire Voice', description: 'News from West Berkshire Voice.', nav: 'news.html',
