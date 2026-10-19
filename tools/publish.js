@@ -1,5 +1,5 @@
 // Run by the "Publish" and "Unpublish" buttons in the editor (see .github/workflows/publish.yml).
-// It moves ONE story between the drafts copy (branch "drafts") and the live site (branch "main").
+// It moves ONE news story or lost pet between the drafts copy (branch "drafts") and the live site (branch "main").
 // Nothing else on the live site is touched.
 const { execFileSync } = require('child_process');
 const fs = require('fs');
@@ -20,7 +20,7 @@ if (!who.some((w) => allowed.includes(w))) stop(`${by.name || 'you'} are not on 
 
 // 2. Which story, and which button.
 const story = String((payload.context || {}).path || '');
-if (!/^stories\/[^/\\]+\.json$/.test(story)) stop('this button only works from inside a news story.');
+if (!/^(stories|pets)\/[^/\\]+\.json$/.test(story)) stop('this button only works from inside a news story or a lost pet.');
 const unpublish = ((payload.action || {}).name || '') === 'unpublish-story';
 
 git('config', 'user.name', 'West Berkshire Voice publisher');
@@ -33,7 +33,7 @@ let data;
 try { data = JSON.parse(draftsText); } catch (e) { stop('that story file is damaged and could not be read.'); }
 const title = data.title || story;
 const flagged = (draft) => JSON.stringify({ ...data, draft }, null, 2) + '\n';
-const changed = () => git('status', '--porcelain', '--untracked-files=all', '--', 'stories', 'static') !== '';
+const changed = () => git('status', '--porcelain', '--untracked-files=all', '--', 'stories', 'pets', 'static') !== '';
 
 // 3. The live site (branch "main", already checked out).
 // removed.json lists unpublished stories, so their addresses show a "not here" page at once
@@ -65,7 +65,7 @@ if (unpublish) {
   try { execFileSync('node', ['build.js'], { stdio: 'inherit', env: { ...process.env, CF_PAGES_BRANCH: 'main' } }); } catch (e) { stop('the live site would not build with this story. Nothing has been changed.'); }
   const page = path.join('_site', path.basename(story, '.json') + '.html');
   if (!fs.existsSync(page)) stop('this story was held back. Check that it has a headline and a date, and that every picture is uploaded to our own site and is 16:9. The amber warnings on the drafts copy say what to fix.');
-  git('add', '--', 'stories', 'static');
+  git('add', '--', 'stories', 'pets', 'static');
   if (git('diff', '--cached', '--name-only') === '') stop('nothing to publish. The saved version of this story is already on the live site. If you have made changes, click Save first, then publish again.');
   git('commit', '-q', '-m', `Publish: ${title}`);
 }
