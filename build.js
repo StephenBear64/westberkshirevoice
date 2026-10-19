@@ -282,8 +282,10 @@ function petItem(p) {
 
 function petPage(p) {
   const figure = p.image ? `${p.imageMissing ? '' : shapeWarning(p.image)}<figure>${petPic(p, pic(p.imageMissing ? MISSING_BOX : `<img src="${esc(p.image)}" alt="${esc(petAlt(p))}">`, ''))}${caption(p.caption)}</figure>\n` : '';
-  const phone = String(p.phone || '').trim();
-  const email = String(p.email || '').trim();
+  // Owner's phone and email are shown only while the pet is lost. For found and died they stay in the record but are not published.
+  const showContact = p.status === 'lost';
+  const phone = showContact ? String(p.phone || '').trim() : '';
+  const email = showContact ? String(p.email || '').trim() : '';
   const facts = [
     ['Gender', GENDER[p.gender]],
     ['Date last seen', esc(longDate(p.date))],
