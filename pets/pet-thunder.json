@@ -8,7 +8,7 @@
   "location": "Battalion Way, Kennet Heath, Thatcham",
   "owner": "Sophie",
   "phone": "07564733580",
-  "draft": true,
+  "draft": false,
   "content": [
     {
       "type": "text",
